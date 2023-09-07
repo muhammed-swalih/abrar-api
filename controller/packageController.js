@@ -34,9 +34,9 @@ export const addPackage = (req, res) => {
       });
 
       try {
-        const imageURL = `${req.protocol}://${req.get(
-          "host"
-        )}/uploads/${encodeURIComponent(req.file.originalname)}`;
+        const imageURL = `https://wings-52gz.onrender.com/uploads/${encodeURIComponent(
+          req.file.originalname
+        )}`;
 
         const savedPackage = {
           title: req.body.title,

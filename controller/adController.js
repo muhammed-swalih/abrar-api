@@ -28,9 +28,7 @@ export const postAd = (req, res) => {
       });
 
       try {
-        const imageURL = `${req.protocol}://${req.get(
-          "host"
-        )}/uploads/${encodeURIComponent(req.file.originalname)}`;
+        const imageURL = `https://wings-52gz.onrender.com/uploads/${encodeURIComponent(req.file.originalname)}`;
 
         const savedPackage = {
           pic: {
@@ -54,29 +52,28 @@ export const postAd = (req, res) => {
   });
 };
 
-export const getAds = async(req,res) => {
-    
-    try {
-        const getData = await ad.find()
-        res.status(200).json(getData)
-    } catch (error) {
-        res.status(500).json(error)
-        console.log(error);
-    }
-}
+export const getAds = async (req, res) => {
+  try {
+    const getData = await ad.find();
+    res.status(200).json(getData);
+  } catch (error) {
+    res.status(500).json(error);
+    console.log(error);
+  }
+};
 
-export const deleteAd = async(req,res) => {
-    const {id} = req.params;
+export const deleteAd = async (req, res) => {
+  const { id } = req.params;
 
-    if(!id){
-        return res.status(500).json("please provide the id")
-    }
+  if (!id) {
+    return res.status(500).json("please provide the id");
+  }
 
-    try {
-        await ad.findByIdAndDelete(id)
-        res.status(200).json("this ad has been deleted")
-    } catch (error) {
-        res.status(500).json(error)
-        console.log(error);
-    }
-}
+  try {
+    await ad.findByIdAndDelete(id);
+    res.status(200).json("this ad has been deleted");
+  } catch (error) {
+    res.status(500).json(error);
+    console.log(error);
+  }
+};

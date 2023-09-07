@@ -12,7 +12,7 @@ app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/packages", packageRoutes);
 app.use("/ads", adRoutes);
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 
 const connect = async () => {
   try {
