@@ -2,16 +2,17 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import packageRoutes from "./routes/packageRoutes.js";
-import adRoutes from './routes/adRouter.js'
+import adRoutes from "./routes/adRouter.js";
 import cors from "cors";
 
-const app = express();
 dotenv.config();
+const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/packages", packageRoutes);
-app.use("/ads",adRoutes)
+app.use("/ads", adRoutes);
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const connect = async () => {
   try {
