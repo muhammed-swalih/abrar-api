@@ -34,9 +34,9 @@ export const addPackage = (req, res) => {
       });
 
       try {
-        const imageURL = `https://wings-52gz.onrender.com/uploads/${encodeURIComponent(
-          req.file.originalname
-        )}`;
+          const imageURL = `https://wings-52gz.onrender.com/images/${encodeURIComponent(
+            req.file.originalname
+          )}`;
 
         const savedPackage = {
           title: req.body.title,
@@ -85,7 +85,11 @@ export const deletePackage = async (req, res) => {
 export const getPackage = async (req, res) => {
   try {
     const response = await packageModel.find();
-    res.status(200).json(response);
+    const otherDocs = response.map((doc)=>{
+      const {pic,...other} = doc.toObject()
+      return other;
+    })
+    res.status(200).json(otherDocs);
   } catch (error) {
     res.status(500).json(error);
     console.log(error);

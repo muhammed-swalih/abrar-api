@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
+app.use('/images', express.static('images'));
 app.use("/packages", packageRoutes);
 app.use("/ads", adRoutes);
 
