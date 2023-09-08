@@ -60,7 +60,7 @@ export const getAds = async (req, res) => {
       const {picUrl,...other} = doc.toObject;
       return picUrl
     })
-    res.status(200).json(response);
+    res.status(200).json(getData);
   } catch (error) {
     res.status(500).json(error);
     console.log(error);
