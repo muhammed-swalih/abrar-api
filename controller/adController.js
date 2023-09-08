@@ -28,7 +28,9 @@ export const postAd = (req, res) => {
       });
 
       try {
-        const imageURL = `https://wings-52gz.onrender.com/uploads/${encodeURIComponent(req.file.originalname)}`;
+        const imageURL = `https://wings-52gz.onrender.com/uploads/${encodeURIComponent(
+          req.file.originalname
+        )}`;
 
         const savedPackage = {
           pic: {
@@ -54,12 +56,9 @@ export const postAd = (req, res) => {
 
 export const getAds = async (req, res) => {
   try {
-    const getData = await ad.find();
+    const getData = await ad.find().select("-pic");
 
-    const response = getData.map((doc)=>{
-      const {picUrl,...other} = doc.toObject;
-      return picUrl
-    })
+    console.log(getData);
     res.status(200).json(getData);
   } catch (error) {
     res.status(500).json(error);
