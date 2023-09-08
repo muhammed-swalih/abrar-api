@@ -55,7 +55,12 @@ export const postAd = (req, res) => {
 export const getAds = async (req, res) => {
   try {
     const getData = await ad.find();
-    res.status(200).json(getData);
+
+    const response = getData.map((doc)=>{
+      const {picUrl,...other} = doc.toObject;
+      return picUrl
+    })
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);
     console.log(error);
