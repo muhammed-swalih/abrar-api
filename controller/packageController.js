@@ -1,7 +1,8 @@
 import packageModel from "../models/packageModel.js";
 import multer from "multer";
 import path from "path";
-
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../firebase.config.js";
 // Set up multer for file uploads
 const Storage = multer.diskStorage({
   destination: "uploads",
@@ -18,9 +19,14 @@ export const addPackage = (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(req.file);
-      const image = Buffer.from(req.file.path);
-      console.log(image);
+      const storageRef = ref(storage, "images/" + req.file.originalname);
+      const image = Buffer.from(req.file.path)
+      const fileData = image;
+      console.log(fileData);
+      await uploadBytesResumable(storageRef, fileData);
+
+      // Get the download URL of the uploaded image
+      const imageURL = await getDownloadURL(storageRef);
       const newPackage = new packageModel({
         title: req.body.title,
         price: req.body.price,
@@ -34,10 +40,6 @@ export const addPackage = (req, res) => {
       });
 
       try {
-          const imageURL = `https://wings-52gz.onrender.com/images/${encodeURIComponent(
-            req.file.originalname
-          )}`;
-
         const savedPackage = {
           title: req.body.title,
           price: req.body.price,
@@ -85,10 +87,10 @@ export const deletePackage = async (req, res) => {
 export const getPackage = async (req, res) => {
   try {
     const response = await packageModel.find();
-    const otherDocs = response.map((doc)=>{
-      const {pic,...other} = doc.toObject()
+    const otherDocs = response.map((doc) => {
+      const { pic, ...other } = doc.toObject();
       return other;
-    })
+    });
     res.status(200).json(otherDocs);
   } catch (error) {
     res.status(500).json(error);
