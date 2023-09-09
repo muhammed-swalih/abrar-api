@@ -33,7 +33,7 @@ export const addPackage = (req, res) => {
         days: req.body.days,
         pic: {
           data: image,
-          contentType: "image/jpeg || image/png",
+          contentType: "image/jpeg || image/avif",
         },
         description: req.body.description,
         special: req.body.special,
@@ -46,7 +46,7 @@ export const addPackage = (req, res) => {
           days: req.body.days,
           pic: {
             data: image,
-            contentType: "image/jpeg || image/png",
+            contentType: "image/jpeg || image/avif",
           },
           description: req.body.description,
           picUrl: imageURL,
