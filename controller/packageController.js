@@ -1,8 +1,8 @@
 import packageModel from "../models/packageModel.js";
 import multer from "multer";
-import path from "path";
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../firebase.config.js";
+import { v4 as uuidv4 } from "uuid";
+import bucket from "../firebase.config.js";
+
 // Set up multer for file uploads
 const Storage = multer.diskStorage({
   destination: "uploads",
@@ -19,27 +19,43 @@ export const addPackage = (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      const metadata = {
-        contentType : req.file.mimetype
-      }
-      const storageRef = ref(storage, "images/" + req.file.originalname);
-      const image = Buffer.from(req.file.path)
-      const fileData = image;
-      console.log(fileData);
-      await uploadBytesResumable(storageRef, fileData,metadata);
+      const uniqueFilename = uuidv4();
+      const filePath = Buffer.from(req.file.path);
+      const destination = `images/${req.file.originalname + uniqueFilename}`;
 
-      // Get the download URL of the uploaded image
-      const imageURL = await getDownloadURL(storageRef);
+      bucket
+        .upload(filePath, {
+          destination: destination,
+          contentType: req.file.mimetype,
+          public: true, // Make the file publicly accessible (optional)
+        })
+        .then(() => {
+          console.log("Image uploaded successfully.");
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+        });
+
+      const file = bucket.file(destination);
+
+      const [url] = await file.getSignedUrl({
+        action: "read",
+        expires: "01-01-2028", // Set an expiration date or duration as needed
+      });
+
+      console.log("Download URL:", url);
+
       const newPackage = new packageModel({
         title: req.body.title,
         price: req.body.price,
         days: req.body.days,
         pic: {
-          data: image,
-          contentType: "image/jpeg || image/avif || image/png",
+          data: filePath,
+          contentType: req.file.mimetype,
         },
         description: req.body.description,
         special: req.body.special,
+        picUrl: url,
       });
 
       try {
@@ -47,18 +63,12 @@ export const addPackage = (req, res) => {
           title: req.body.title,
           price: req.body.price,
           days: req.body.days,
-          pic: {
-            data: image,
-            contentType: "image/jpeg || image/avif || image/png",
-          },
           description: req.body.description,
-          picUrl: imageURL,
+          picUrl: url,
           special: req.body.special,
         };
-
         await packageModel.create(savedPackage);
-
-        res.status(200).json({ ...newPackage.toObject(), pic: imageURL });
+        res.status(200).json(savedPackage);
       } catch (error) {
         res
           .status(500)
@@ -100,3 +110,4 @@ export const getPackage = async (req, res) => {
     console.log(error);
   }
 };
+export default bucket;
