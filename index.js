@@ -1,9 +1,12 @@
-import express from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import packageRoutes from "./routes/packageRoutes.js";
-import adRoutes from "./routes/adRouter.js";
-import cors from "cors";
+const express = require('express');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const packageRoutes = require('./routes/packageRoutes.js');
+const adRoutes = require('./routes/adRouter.js');
+const cors = require('cors');
+
+// Rest of your code...
+
 
 dotenv.config();
 const app = express();

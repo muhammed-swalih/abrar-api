@@ -1,5 +1,6 @@
-import admin from "firebase-admin";
-import serviceAccount from "./abrar-travels-a6cd1-firebase-adminsdk-9d9jz-4e7ab13663.json" assert { type: "json" };
+const admin = require('firebase-admin');
+const serviceAccount = require('./abrar-travels-a6cd1-firebase-adminsdk-9d9jz-4e7ab13663.json');
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -8,4 +9,4 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-export default bucket;
+module.exports = bucket;

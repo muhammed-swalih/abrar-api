@@ -1,6 +1,7 @@
-import express from 'express'
-import { addPackage, deletePackage, getPackage } from '../controller/packageController.js';
-import multer from 'multer';
+const express = require('express');
+const { addPackage, deletePackage, getPackage } = require('../controller/packageController.js');
+const multer = require('multer');
+
 const router = express.Router();
 
 const storage = multer.memoryStorage(); // Store the file in memory as a buffer
@@ -11,4 +12,4 @@ router.get('/',getPackage)
 router.delete('/:id',deletePackage)
 
 
-export default router
+module.exports = router;

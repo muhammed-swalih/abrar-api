@@ -1,9 +1,9 @@
-import multer from "multer";
-import path from "path";
-import ad from "../models/ad.js";
+const multer = require("multer");
+const path = require("path");
+const ad = require("../models/ad.js");
+const uuidv4 = require("uuid").v4;
+const bucket = require("../firebase.config.js");
 
-import { v4 as uuidv4 } from "uuid";
-import bucket from "../firebase.config.js";
 const Storage = multer.diskStorage({
   destination: "uploads",
   filename: (req, file, cb) => {
@@ -14,9 +14,7 @@ const upload = multer({
   storage: Storage,
 }).single("pic");
 
-
-
-export const postAd = (req, res) => {
+exports.postAd = (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
       console.log(err);
@@ -24,8 +22,6 @@ export const postAd = (req, res) => {
       const uniqueFilename = uuidv4();
       const filePath = Buffer.from(req.file.path);
       const destination = `ads/${req.file.originalname + uniqueFilename}`;
-
-      
 
       bucket
         .upload(filePath, {
@@ -75,7 +71,7 @@ export const postAd = (req, res) => {
   });
 };
 
-export const getAds = async (req, res) => {
+exports.getAds = async (req, res) => {
   try {
     const getData = await ad.find().select("-pic");
 
@@ -87,7 +83,7 @@ export const getAds = async (req, res) => {
   }
 };
 
-export const deleteAd = async (req, res) => {
+exports.deleteAd = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
@@ -102,4 +98,4 @@ export const deleteAd = async (req, res) => {
     console.log(error);
   }
 };
-export default bucket
+

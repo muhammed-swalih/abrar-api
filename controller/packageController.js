@@ -1,7 +1,8 @@
-import packageModel from "../models/packageModel.js";
-import multer from "multer";
-import { v4 as uuidv4 } from "uuid";
-import bucket from "../firebase.config.js";
+const packageModel = require('../models/packageModel.js');
+const multer = require('multer');
+const uuidv4 = require('uuid').v4;
+const bucket = require('../firebase.config.js');
+
 
 // Set up multer for file uploads
 const Storage = multer.diskStorage({
@@ -14,7 +15,7 @@ const upload = multer({
   storage: Storage,
 }).single("pic");
 
-export const addPackage = (req, res) => {
+exports.addPackage = (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
       console.log(err);
@@ -80,7 +81,7 @@ export const addPackage = (req, res) => {
   });
 };
 
-export const deletePackage = async (req, res) => {
+exports.deletePackage = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
@@ -97,7 +98,7 @@ export const deletePackage = async (req, res) => {
   }
 };
 
-export const getPackage = async (req, res) => {
+exports.getPackage = async (req, res) => {
   try {
     const response = await packageModel.find();
     const otherDocs = response.map((doc) => {
@@ -110,4 +111,4 @@ export const getPackage = async (req, res) => {
     console.log(error);
   }
 };
-export default bucket;
+
