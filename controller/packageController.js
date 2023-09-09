@@ -19,11 +19,14 @@ export const addPackage = (req, res) => {
     if (err) {
       console.log(err);
     } else {
+      const metadata = {
+        contentType : req.file.mimetype
+      }
       const storageRef = ref(storage, "images/" + req.file.originalname);
       const image = Buffer.from(req.file.path)
       const fileData = image;
       console.log(fileData);
-      await uploadBytesResumable(storageRef, fileData);
+      await uploadBytesResumable(storageRef, fileData,metadata);
 
       // Get the download URL of the uploaded image
       const imageURL = await getDownloadURL(storageRef);
@@ -33,7 +36,7 @@ export const addPackage = (req, res) => {
         days: req.body.days,
         pic: {
           data: image,
-          contentType: "image/jpeg || image/avif",
+          contentType: "image/jpeg || image/avif || image/png",
         },
         description: req.body.description,
         special: req.body.special,
@@ -46,7 +49,7 @@ export const addPackage = (req, res) => {
           days: req.body.days,
           pic: {
             data: image,
-            contentType: "image/jpeg || image/avif",
+            contentType: "image/jpeg || image/avif || image/png",
           },
           description: req.body.description,
           picUrl: imageURL,
