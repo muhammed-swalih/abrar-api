@@ -6,6 +6,6 @@ const router  = express.Router();
 
 router.post('/',postAd)
 router.get('/', getAds)
-router.delete('/',deleteAd)
+router.delete('/:id',deleteAd)
 
 module.exports =  router

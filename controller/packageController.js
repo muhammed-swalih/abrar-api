@@ -67,7 +67,10 @@ exports.addPackage = (req, res) => {
           description: req.body.description,
           picUrl: url,
           special: req.body.special,
+          _id : newPackage._id
         };
+
+        
         await packageModel.create(savedPackage);
         res.status(200).json(savedPackage);
       } catch (error) {

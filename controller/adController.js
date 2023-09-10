@@ -59,7 +59,9 @@ exports.postAd = (req, res) => {
 
         await ad.create(savedPackage);
 
-        res.status(200).json(savedPackage);
+        const {pic,...other} = newPackage._doc
+
+        res.status(200).json([other,savedPackage]);
       } catch (error) {
         res
           .status(500)
